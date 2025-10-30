@@ -1340,3 +1340,53 @@ COMPATIBILITY NOTES:
 - React 19.2.0 requires careful consideration for production use
 - These changes ensure stable builds on Render
 
+
+API URL FIX FOR PRODUCTION (October 30, 2025)
+=============================================
+
+ISSUE: CORS Error on Production
+--------------------------------
+Error: "Access to fetch at 'http://localhost:5000/api/auth/partner/login' 
+       from origin 'https://crunchperks.onrender.com' has been blocked by CORS"
+
+Cause: Frontend built into production was still trying to call localhost API
+       URLs instead of using relative URLs for same-origin requests.
+
+ROOT CAUSE:
+-----------
+- API_BASE_URL in src/utils/api.js defaulted to 'http://localhost:5000/api'
+- AdCreator.js used process.env.REACT_APP_API_URL directly
+- REACT_APP_API_URL wasn't set in Render, so it fell back to localhost
+- Production build "baked in" the localhost URL
+
+SOLUTION:
+---------
+1. Changed API_BASE_URL default from 'http://localhost:5000/api' to '/api'
+2. Exported API_BASE_URL from api.js for reuse
+3. Updated AdCreator.js to import and use API_BASE_URL
+4. This ensures production uses relative URLs (same-origin, no CORS)
+5. Development still works because .env sets REACT_APP_API_URL
+
+Files Changed:
+--------------
+src/utils/api.js:
+  - Changed: const API_BASE_URL = ... to export const API_BASE_URL = ...
+  - Default changed from 'http://localhost:5000/api' to '/api'
+  
+src/components/dashboard/AdCreator.js:
+  - Added import: API_BASE_URL from '../../utils/api'
+  - Changed fetch URL from process.env.REACT_APP_API_URL to API_BASE_URL
+
+HOW IT WORKS NOW:
+-----------------
+Development (npm run dev):
+  - .env sets REACT_APP_API_URL=http://localhost:5001/api
+  - Frontend on :3000 calls backend on :5001
+  - Works with separate dev servers
+
+Production (Render):
+  - REACT_APP_API_URL not set (undefined)
+  - Falls back to '/api' (relative URL)
+  - Same-origin requests to https://crunchperks.onrender.com/api
+  - No CORS issues
+

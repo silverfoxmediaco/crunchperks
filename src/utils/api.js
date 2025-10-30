@@ -1,4 +1,6 @@
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+// In production, use relative URL since backend serves frontend
+// In development, use environment variable for separate ports
+export const API_BASE_URL = process.env.REACT_APP_API_URL || '/api';
 
 const handleResponse = async (response) => {
   // Handle 401 - Unauthorized (token invalid or expired)

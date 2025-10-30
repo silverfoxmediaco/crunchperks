@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { apiClient } from '../../utils/api';
+import { apiClient, API_BASE_URL } from '../../utils/api';
 
 const AdCreator = ({ onSave, existingAd = null }) => {
   const [adData, setAdData] = useState({
@@ -120,7 +120,7 @@ const AdCreator = ({ onSave, existingAd = null }) => {
 
       // Make API call to create ad
       const token = localStorage.getItem('token');
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/ads/create`, {
+      const response = await fetch(`${API_BASE_URL}/ads/create`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
