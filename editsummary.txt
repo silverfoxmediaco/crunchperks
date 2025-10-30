@@ -1184,3 +1184,76 @@ TESTING
 ✓ Better error messages with actual dimensions
 
 The ad creation system should now work properly for uploading images.
+
+=====================================
+GITHUB REPOSITORY SETUP
+=====================================
+Date: October 28, 2025
+
+REPOSITORY CONFIGURATION
+-------------------------
+✓ Repository URL: https://github.com/silverfoxmediaco/crunchperks.git
+✓ Branch: main (renamed from master)
+✓ Initial commit completed
+✓ All code pushed to GitHub
+
+FILES COMMITTED
+---------------
+Total: 63 files
+- Complete frontend (React + Tailwind)
+- Complete backend (Express + MongoDB)
+- All components and pages
+- Server configuration and routes
+- Authentication system
+- Ad creation with Cloudinary
+- Image validation middleware
+- MongoDB models and schemas
+- API utilities and validation
+- README.md with setup instructions
+- All assets and styling
+
+SECURITY
+--------
+✓ .env file excluded from repository (.gitignore)
+✓ Sensitive credentials NOT pushed:
+  - MongoDB connection string
+  - JWT secret key
+  - Cloudinary API credentials
+✓ node_modules excluded
+✓ Build folder excluded
+
+COMMIT DETAILS
+--------------
+Commit Hash: 91443a5
+Commit Message: "Initial commit: Crunch Perks partner advertising platform"
+Files Changed: 63 files
+Insertions: 8072 lines
+Branch: main
+Remote: origin (GitHub)
+
+NEXT STEPS FOR TEAM MEMBERS
+----------------------------
+To clone and run the project:
+
+1. Clone repository:
+   git clone https://github.com/silverfoxmediaco/crunchperks.git
+   cd crunchperks
+
+2. Install dependencies:
+   npm install
+
+3. Create .env file with credentials:
+   - MONGODB_URI
+   - JWT_SECRET
+   - CLOUDINARY credentials
+   - PORT and API_URL
+
+4. Run development environment:
+   npm run dev
+
+REPOSITORY ACCESS
+-----------------
+Repository is now live at:
+https://github.com/silverfoxmediaco/crunchperks
+
+Team members can clone, contribute, and deploy from this repository.
