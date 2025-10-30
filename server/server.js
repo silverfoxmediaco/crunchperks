@@ -16,9 +16,21 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // API Routes
-app.use('/api/applications', require('./routes/applicationRoutes'));
-app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/ads', require('./routes/adRoutes'));
+const applicationRoutes = require('./routes/applicationRoutes');
+const authRoutes = require('./routes/authRoutes');
+const adRoutes = require('./routes/adRoutes');
+
+app.use('/api/applications', applicationRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/ads', adRoutes);
+
+// Log registered routes in development
+if (process.env.NODE_ENV !== 'production') {
+  console.log('📍 Registered API routes:');
+  console.log('  - /api/applications');
+  console.log('  - /api/auth');
+  console.log('  - /api/ads');
+}
 
 // Health Check
 app.get('/api/health', (req, res) => {
