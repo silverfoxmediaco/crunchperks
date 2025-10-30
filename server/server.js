@@ -16,20 +16,27 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // API Routes
-const applicationRoutes = require('./routes/applicationRoutes');
-const authRoutes = require('./routes/authRoutes');
-const adRoutes = require('./routes/adRoutes');
+try {
+  console.log('Loading API routes...');
+  const applicationRoutes = require('./routes/applicationRoutes');
+  console.log('✅ applicationRoutes loaded');
+  const authRoutes = require('./routes/authRoutes');
+  console.log('✅ authRoutes loaded');
+  const adRoutes = require('./routes/adRoutes');
+  console.log('✅ adRoutes loaded');
 
-app.use('/api/applications', applicationRoutes);
-app.use('/api/auth', authRoutes);
-app.use('/api/ads', adRoutes);
+  app.use('/api/applications', applicationRoutes);
+  app.use('/api/auth', authRoutes);
+  app.use('/api/ads', adRoutes);
 
-// Log registered routes in development
-if (process.env.NODE_ENV !== 'production') {
-  console.log('📍 Registered API routes:');
+  console.log('📍 API routes registered:');
   console.log('  - /api/applications');
-  console.log('  - /api/auth');
+  console.log('  - /api/auth/partner/login');
+  console.log('  - /api/auth/partner/signup');
   console.log('  - /api/ads');
+} catch (error) {
+  console.error('❌ Error loading API routes:', error);
+  process.exit(1);
 }
 
 // Health Check
