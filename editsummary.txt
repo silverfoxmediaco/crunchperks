@@ -1419,3 +1419,37 @@ Middleware order now:
 4. Error handler (catches API errors)
 5. Static files + catch-all (production only)
 
+
+PRODUCTION ROUTING FIX (October 30, 2025)
+=========================================
+
+ISSUE: API requests returning HTML instead of JSON
+--------------------------------------------------
+Even with NODE_ENV=production set correctly, API requests were
+returning HTML (index.html) instead of JSON responses.
+
+ROOT CAUSE:
+-----------
+The catch-all route app.get('*', ...) was too broad and could
+potentially catch some API requests, especially GET requests or
+requests that didn't match the exact route patterns.
+
+SOLUTION:
+---------
+1. Added explicit 404 handler for /api/* routes that returns JSON
+2. Simplified catch-all to only serve index.html for non-API routes
+3. Proper separation between API responses and frontend routes
+
+New routing order in production:
+1. API routes (/api/auth, /api/applications, /api/ads)
+2. Health check (/api/health)
+3. Error handler (catches errors, returns JSON)
+4. Static files from build/
+5. API 404 handler (/api/* → JSON 404)
+6. React catch-all (everything else → index.html)
+
+This ensures:
+- All /api/* requests return JSON (either success, error, or 404)
+- All other requests serve the React application
+- No HTML responses for API endpoints
+

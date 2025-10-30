@@ -43,6 +43,14 @@ app.use((err, req, res, next) => {
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../build')));
 
+  // 404 handler for API routes that don't match
+  app.use('/api/*', (req, res) => {
+    res.status(404).json({
+      success: false,
+      message: 'API route not found'
+    });
+  });
+
   // Handle React routing - return index.html for all non-API routes
   // This must be last - it catches all non-API routes
   app.get('*', (req, res) => {
