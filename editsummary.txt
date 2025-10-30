@@ -1622,3 +1622,58 @@ Result:
 ✓ Shows website URL instead of brand name
 ✓ More prominent and balanced positioning
 
+
+DASHBOARD PREVIEW BUTTON ADDED (October 30, 2025)
+==================================================
+
+CHANGES MADE
+------------
+File: src/components/dashboard/DashboardOverview.js
+
+Added TV preview functionality to Overview tab:
+
+1. Imported AdPreview component:
+   - Added import statement for AdPreview
+
+2. Added state management:
+   - Added showPreview state using useState
+
+3. Added "Preview on TV" button in Overview tab:
+   - Positioned as first button in action buttons
+   - Orange CTA styling (btn-cta)
+   - TV emoji icon (📺)
+   - Full width layout (w-full)
+   - Opens preview modal on click
+
+4. Added AdPreview component render:
+   - Conditionally renders when showPreview is true and currentAd exists
+   - Transforms currentAd data to match AdPreview props:
+     * imagePreview: Uses getFullSizeUrl(currentAd.imageUrl)
+     * title: currentAd.title
+     * catchphrase: currentAd.catchphrase
+   - Closes modal via setShowPreview(false)
+
+Button Order (in "YOUR CURRENT AD" section):
+1. 📺 Preview on TV (NEW - orange CTA)
+2. Edit Ad (secondary)
+3. View Analytics (primary)
+4. Pause Campaign (red secondary)
+
+Technical Details:
+- Preview button only shown when currentAd exists
+- Uses Cloudinary getFullSizeUrl for optimal image quality in preview
+- Modal overlay appears on top of dashboard
+- Clean state management with single boolean flag
+
+User Experience:
+✓ Partners can instantly preview their live ad
+✓ No need to navigate to Create Ad tab
+✓ Quick validation of how ad appears on TV
+✓ Prominent placement as primary action
+
+Benefits:
+- Faster access to preview functionality
+- Better user flow for checking ad appearance
+- Encourages partners to review their ads
+- More confident decision-making
+

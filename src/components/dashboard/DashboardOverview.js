@@ -4,6 +4,7 @@ import { apiClient } from '../../utils/api';
 import { getThumbnailUrl, getFullSizeUrl } from '../../utils/cloudinary';
 import AdCreator from './AdCreator';
 import AdAnalytics from './AdAnalytics';
+import AdPreview from './AdPreview';
 
 const DashboardOverview = () => {
   const { user } = useAuth();
@@ -11,6 +12,7 @@ const DashboardOverview = () => {
   const [ads, setAds] = useState([]);
   const [currentAd, setCurrentAd] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showPreview, setShowPreview] = useState(false);
 
   // Fetch ads on component mount
   useEffect(() => {
@@ -147,6 +149,12 @@ const DashboardOverview = () => {
                     </div>
                     <div className="space-y-4">
                       <button
+                        onClick={() => setShowPreview(true)}
+                        className="btn-cta w-full"
+                      >
+                        📺 Preview on TV
+                      </button>
+                      <button
                         onClick={() => setActiveTab('create-ad')}
                         className="btn-secondary w-full"
                       >
@@ -279,6 +287,18 @@ const DashboardOverview = () => {
           )}
         </div>
       </div>
+
+      {/* TV Preview Modal */}
+      {showPreview && currentAd && (
+        <AdPreview
+          ad={{
+            imagePreview: getFullSizeUrl(currentAd.imageUrl),
+            title: currentAd.title,
+            catchphrase: currentAd.catchphrase
+          }}
+          onClose={() => setShowPreview(false)}
+        />
+      )}
     </div>
   );
 };
