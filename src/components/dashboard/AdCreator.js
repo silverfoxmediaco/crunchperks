@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { apiClient, API_BASE_URL } from '../../utils/api';
+import AdPreview from './AdPreview';
 
 const AdCreator = ({ onSave, existingAd = null }) => {
   const [adData, setAdData] = useState({
@@ -12,6 +13,7 @@ const AdCreator = ({ onSave, existingAd = null }) => {
 
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
   const fileInputRef = useRef(null);
 
   const handleImageUpload = (e) => {
@@ -304,6 +306,23 @@ const AdCreator = ({ onSave, existingAd = null }) => {
             </div>
           </div>
 
+          {/* Preview Button */}
+          <div className="mb-4">
+            <button
+              type="button"
+              onClick={() => setShowPreview(true)}
+              disabled={!adData.imagePreview || !adData.title || !adData.catchphrase}
+              className="btn-secondary w-full disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Preview on TV Screen
+            </button>
+            {(!adData.imagePreview || !adData.title || !adData.catchphrase) && (
+              <p className="text-sm text-gray-500 mt-2 text-center">
+                Complete all fields to enable preview
+              </p>
+            )}
+          </div>
+
           {/* Action Buttons */}
           <div className="flex gap-4">
             <button
@@ -392,6 +411,14 @@ const AdCreator = ({ onSave, existingAd = null }) => {
           </p>
         </div>
       </div>
+
+      {/* TV Preview Modal */}
+      {showPreview && (
+        <AdPreview
+          ad={adData}
+          onClose={() => setShowPreview(false)}
+        />
+      )}
     </div>
   );
 };

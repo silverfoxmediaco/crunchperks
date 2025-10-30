@@ -1490,3 +1490,110 @@ Express 5 breaking changes:
 - Must use regex patterns for wildcard matching
 - Package.json shows "express": "^5.1.0"
 
+
+TV PREVIEW FEATURE ADDED (October 30, 2025)
+============================================
+
+NEW COMPONENT CREATED
+---------------------
+File: src/components/dashboard/AdPreview.js
+Purpose: Modal overlay showing how ads will appear on 1920×1080 TV screens
+
+Features:
+✓ Full-screen modal with dark overlay (bg-black/90 opacity)
+✓ TV frame styling with gray borders
+✓ 16:9 aspect ratio container (56.25% padding-bottom trick)
+✓ Background image display from ad data
+✓ Text overlay with title and catchphrase
+✓ Crunch Perks branding in bottom-right corner
+✓ Close button at top-right
+✓ TV display dimensions label (1920×1080)
+✓ User instructions below preview
+
+Technical Implementation:
+- Fixed positioning (inset-0) for full-screen coverage
+- z-50 to appear above all other content
+- Responsive sizing (max-w-6xl container)
+- Gradient overlays for text readability
+- Black semi-transparent overlay on background (bg-black/40)
+- Large responsive text sizing (6xl to 8xl for title)
+- Orange accent color for catchphrase
+- Burgundy brand badge with rounded corners
+
+Props:
+- ad: Object containing imagePreview, title, catchphrase
+- onClose: Function to close the modal
+
+ADCREATOR COMPONENT UPDATES
+---------------------------
+File: src/components/dashboard/AdCreator.js
+
+Changes Made:
+1. Added import: import AdPreview from './AdPreview';
+
+2. Added state management:
+   const [showPreview, setShowPreview] = useState(false);
+
+3. Added preview button (lines 309-324):
+   - Button text: "Preview on TV Screen"
+   - Disabled unless all fields complete (image, title, catchphrase)
+   - Full-width button (w-full)
+   - Shows helper text when disabled
+   - Opens preview modal on click
+
+4. Added conditional rendering (lines 415-421):
+   - Renders AdPreview component when showPreview is true
+   - Passes current adData to preview
+   - Closes modal via setShowPreview(false)
+
+Button Positioning:
+- Placed above "Save as Draft" and "Submit for Review" buttons
+- Clearly separated with margin-bottom
+- Integrates seamlessly with existing UI
+
+USER EXPERIENCE FLOW
+---------------------
+1. Partner uploads image (1920×1080)
+2. Partner enters title (max 50 chars)
+3. Partner enters catchphrase (max 75 chars)
+4. "Preview on TV Screen" button becomes enabled
+5. Click button to see full-screen TV simulation
+6. Preview shows exactly how ad will appear on gym screens
+7. Close preview and make adjustments if needed
+8. Save as draft or submit for review
+
+VALIDATION & UX
+---------------
+✓ Button disabled until all required fields filled
+✓ Clear user feedback ("Complete all fields to enable preview")
+✓ Easy to close preview (click X button)
+✓ No navigation required - modal overlay
+✓ Accurate representation of final TV display
+
+BENEFITS
+--------
+- Partners can see exactly what members will see
+- Reduces revision requests and approval time
+- Builds confidence before submission
+- Professional presentation mimicking actual TV display
+- No guesswork about final appearance
+
+FILES MODIFIED
+--------------
+1. src/components/dashboard/AdCreator.js
+   - Added preview state
+   - Added preview button
+   - Added AdPreview component render
+   - Total changes: ~20 lines
+
+2. src/components/dashboard/AdPreview.js
+   - New file created
+   - Total lines: ~70 lines
+
+EDITSUMMARY.TXT UPDATED
+-----------------------
+✓ All changes documented
+✓ TV preview feature fully described
+✓ Implementation details recorded
+✓ User experience flow documented
+
