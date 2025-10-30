@@ -44,9 +44,9 @@ const AdPreview = ({ ad, onClose }) => {
                   </p>
                 </div>
 
-                {/* Crunch Perks Branding (bottom corner) */}
-                <div className="absolute bottom-4 right-4 bg-burgundy bg-opacity-90 px-6 py-3 rounded">
-                  <p className="text-white font-heading text-2xl">CRUNCH PERKS</p>
+                {/* Crunch Perks Branding (bottom center) */}
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-burgundy bg-opacity-90 px-6 py-3 rounded">
+                  <p className="text-white font-heading text-2xl">crunchperks.com</p>
                 </div>
               </div>
             </div>

@@ -1597,3 +1597,28 @@ EDITSUMMARY.TXT UPDATED
 ✓ Implementation details recorded
 ✓ User experience flow documented
 
+
+ADPREVIEW BRANDING UPDATE (October 30, 2025)
+=============================================
+
+CHANGES MADE
+------------
+File: src/components/dashboard/AdPreview.js
+
+Updated Crunch Perks branding element:
+- Moved from bottom-right corner to bottom-center
+- Changed positioning from "bottom-4 right-4" to "bottom-4 left-1/2 -translate-x-1/2"
+- Changed text from "CRUNCH PERKS" to "crunchperks.com"
+
+Technical Details:
+- Uses left-1/2 to position at 50% from left
+- Uses -translate-x-1/2 to center the element
+- Maintains burgundy background with 90% opacity
+- Keeps same padding and rounded corners
+- Same text styling (white, font-heading, text-2xl)
+
+Result:
+✓ Branding badge now centered at bottom of TV display
+✓ Shows website URL instead of brand name
+✓ More prominent and balanced positioning
+
