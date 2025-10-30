@@ -62,18 +62,22 @@ app.use((err, req, res, next) => {
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../build')));
 
-  // 404 handler for API routes that don't match
-  app.use(/^\/api\/.*/, (req, res) => {
+  // Handle React routing - return index.html for all non-API routes
+  // Skip API routes and serve index.html for everything else
+  app.get('*', (req, res, next) => {
+    // If it's an API route that got here, it's a 404 - pass to next middleware
+    if (req.path.startsWith('/api/')) {
+      return next();
+    }
+    res.sendFile(path.join(__dirname, '../build/index.html'));
+  });
+
+  // 404 handler for API routes that don't match (must be after catch-all)
+  app.use('/api/*', (req, res) => {
     res.status(404).json({
       success: false,
       message: 'API route not found'
     });
-  });
-
-  // Handle React routing - return index.html for all non-API routes
-  // This must be last - it catches all non-API routes
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../build/index.html'));
   });
 } else {
   // 404 Handler for development (API only)
