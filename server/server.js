@@ -63,7 +63,7 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../build')));
 
   // 404 handler for API routes that don't match
-  app.use('/api/*', (req, res) => {
+  app.use(/^\/api\/.*/, (req, res) => {
     res.status(404).json({
       success: false,
       message: 'API route not found'

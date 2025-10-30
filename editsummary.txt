@@ -1453,3 +1453,40 @@ This ensures:
 - All other requests serve the React application
 - No HTML responses for API endpoints
 
+
+EXPRESS 5 WILDCARD SYNTAX FIX (October 30, 2025)
+================================================
+
+CRITICAL BUG FOUND
+------------------
+Error: PathError [TypeError]: Missing parameter name at index 6: /api/*
+
+ROOT CAUSE:
+-----------
+Express 5 changed wildcard route syntax. The `*` wildcard is no longer
+supported in route paths like '/api/*'. This was causing the server to
+CRASH silently when trying to register the API 404 handler.
+
+Impact:
+- Server would start but crash when mounting the /api/* route
+- All API routes (except /api/health which was defined before the crash) 
+  would return 404
+- No error logs visible in Render HTTP logs (only in startup logs)
+
+FIX:
+----
+Changed from Express 4 wildcard syntax:
+  app.use('/api/*', handler)
+
+To Express 5 regex pattern:
+  app.use(/^\/api\/.*/, handler)
+
+This regex matches all paths starting with /api/ followed by any characters.
+
+LESSON LEARNED:
+---------------
+Express 5 breaking changes:
+- Wildcards (*) in paths no longer supported
+- Must use regex patterns for wildcard matching
+- Package.json shows "express": "^5.1.0"
+
