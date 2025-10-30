@@ -64,16 +64,12 @@ if (process.env.NODE_ENV === 'production') {
 
   // Handle React routing - return index.html for all non-API routes
   // Skip API routes and serve index.html for everything else
-  app.get('*', (req, res, next) => {
-    // If it's an API route that got here, it's a 404 - pass to next middleware
-    if (req.path.startsWith('/api/')) {
-      return next();
-    }
+  app.get(/^\/(?!api\/).*/, (req, res) => {
     res.sendFile(path.join(__dirname, '../build/index.html'));
   });
 
   // 404 handler for API routes that don't match (must be after catch-all)
-  app.use('/api/*', (req, res) => {
+  app.use(/^\/api\/.*/, (req, res) => {
     res.status(404).json({
       success: false,
       message: 'API route not found'
