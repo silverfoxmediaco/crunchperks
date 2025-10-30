@@ -1708,3 +1708,107 @@ Result:
 ✓ Terms checkbox validation passes
 ✓ Partners can successfully submit applications
 
+
+AUTO-APPROVE APPLICATIONS (October 30, 2025)
+============================================
+
+FEATURE IMPLEMENTED
+-------------------
+Added auto-approval workflow for testing (works in any environment)
+
+Files Modified:
+- server/controllers/applicationController.js
+- .env
+
+Changes Made:
+1. Added Partner model import
+
+2. Auto-approval logic in submitApplication():
+   - Checks if AUTO_APPROVE_APPLICATIONS === 'true'
+   - If enabled:
+     * Updates application status to 'approved'
+     * Sets approvedAt and reviewedAt timestamps
+     * Automatically creates Partner account
+     * Uses default password: 'CrunchPerks2025!'
+     * Returns login credentials in API response
+
+3. Partner Account Creation:
+   - businessName: from application
+   - ein: from application
+   - email: from application contact email
+   - password: 'CrunchPerks2025!' (hashed by pre-save hook)
+   - contactName: firstName + lastName
+   - phoneNumber: from application
+   - accountStatus: 'active'
+   - tier: from application
+   - applicationId: links to application
+
+4. Enhanced API Response:
+   - In development: includes partnerAccount object with:
+     * email
+     * temporaryPassword
+     * loginUrl: '/login'
+   - In production: standard response only
+
+5. Console Logging:
+   - Logs when auto-approval happens
+   - Shows partner account details created
+   - Helps with debugging
+
+HOW IT WORKS
+------------
+When AUTO_APPROVE_APPLICATIONS=true:
+1. User submits application
+2. Application created with status 'pending'
+3. Immediately approved and status changed to 'approved'
+4. Partner account created automatically
+5. Response includes login credentials
+6. User can login immediately with:
+   - Email: their application email
+   - Password: 'CrunchPerks2025!'
+
+When AUTO_APPROVE_APPLICATIONS=false or not set:
+1. User submits application
+2. Application created with status 'pending'
+3. Requires manual admin approval
+4. Partner account NOT created automatically
+
+BENEFITS
+--------
+✓ Rapid testing without manual approval step
+✓ Immediate partner account creation
+✓ No need for admin portal during testing
+✓ Can enable in production for client testing
+✓ Credentials provided in API response
+✓ Can test full partner workflow instantly
+✓ Easy to toggle on/off via environment variable
+
+SECURITY
+--------
+✓ Controlled by environment variable
+✓ Can disable when ready for manual approvals
+✓ Default password is strong and can be changed
+✓ Password is hashed before storage
+✓ Only active when explicitly enabled
+
+RENDER SETUP
+------------
+To enable auto-approval on Render:
+1. Go to Render Dashboard
+2. Select your service
+3. Go to Environment tab
+4. Add variable: AUTO_APPROVE_APPLICATIONS = true
+5. Click "Save Changes"
+6. Service will auto-deploy with new setting
+
+TESTING WORKFLOW
+----------------
+1. Submit application via signup form
+2. Application auto-approved
+3. Partner account created
+4. Use credentials to login:
+   - Email: your application email
+   - Password: CrunchPerks2025!
+5. Access full partner dashboard
+6. Create ads, view analytics, etc.
+
