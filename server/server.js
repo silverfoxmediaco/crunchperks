@@ -29,11 +29,22 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Error Handler (must come before catch-all route)
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || 'Internal Server Error',
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+  });
+});
+
 // Serve static files from React build in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../build')));
 
   // Handle React routing - return index.html for all non-API routes
+  // This must be last - it catches all non-API routes
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../build/index.html'));
   });
@@ -46,16 +57,6 @@ if (process.env.NODE_ENV === 'production') {
     });
   });
 }
-
-// Error Handler
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(err.status || 500).json({
-    success: false,
-    message: err.message || 'Internal Server Error',
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
-  });
-});
 
 const PORT = process.env.PORT || 5000;
 

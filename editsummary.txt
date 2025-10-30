@@ -1390,3 +1390,32 @@ Production (Render):
   - Same-origin requests to https://crunchperks.onrender.com/api
   - No CORS issues
 
+
+MIDDLEWARE ORDER FIX (October 30, 2025)
+=======================================
+
+ISSUE: HTML returned instead of JSON from API
+---------------------------------------------
+Error: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+
+ROOT CAUSE:
+-----------
+Error handler was placed AFTER the catch-all route, which could cause
+API errors to fall through to the catch-all instead of being properly
+handled as JSON error responses.
+
+FIX:
+----
+Moved error handler middleware BEFORE the production catch-all route.
+This ensures:
+1. API route errors are caught and returned as JSON
+2. Only unmatched routes fall through to the catch-all
+3. Proper error handling for API endpoints
+
+Middleware order now:
+1. CORS, body parsing
+2. API routes
+3. Health check
+4. Error handler (catches API errors)
+5. Static files + catch-all (production only)
+
