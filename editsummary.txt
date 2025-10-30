@@ -1313,3 +1313,30 @@ After: Single-service monolithic architecture (backend serves frontend)
 This change was made in response to user question about why different commands
 were needed for frontend and backend when only one Render service exists.
 
+
+NODE VERSION FIX FOR RENDER (October 30, 2025)
+==============================================
+
+ISSUE: Build Failure on Render
+-------------------------------
+Error: "sh: 1: react-scripts: not found"
+Cause: Render defaulted to Node.js 22.16.0, which has compatibility issues
+       with react-scripts 5.0.1
+
+SOLUTION:
+---------
+1. Added engines field to package.json:
+   - Node.js: >=18.0.0 <21.0.0 (LTS versions)
+   - npm: >=9.0.0
+
+2. Created .node-version file:
+   - Explicitly specifies Node.js 20.18.0 (LTS)
+   - Render will detect this file and use the specified version
+
+COMPATIBILITY NOTES:
+--------------------
+- react-scripts 5.0.1 is not compatible with Node.js 22
+- Node.js 18 and 20 are LTS (Long Term Support) versions
+- React 19.2.0 requires careful consideration for production use
+- These changes ensure stable builds on Render
+
