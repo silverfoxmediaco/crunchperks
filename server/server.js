@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const connectDB = require('./config/database');
 
 // Initialize Express
@@ -14,7 +15,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
+// API Routes
 app.use('/api/applications', require('./routes/applicationRoutes'));
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/ads', require('./routes/adRoutes'));
@@ -28,6 +29,24 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Serve static files from React build in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../build')));
+
+  // Handle React routing - return index.html for all non-API routes
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../build/index.html'));
+  });
+} else {
+  // 404 Handler for development (API only)
+  app.use((req, res) => {
+    res.status(404).json({
+      success: false,
+      message: 'Route not found'
+    });
+  });
+}
+
 // Error Handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -35,14 +54,6 @@ app.use((err, req, res, next) => {
     success: false,
     message: err.message || 'Internal Server Error',
     ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
-  });
-});
-
-// 404 Handler
-app.use((req, res) => {
-  res.status(404).json({
-    success: false,
-    message: 'Route not found'
   });
 });
 

@@ -1257,3 +1257,59 @@ Repository is now live at:
 https://github.com/silverfoxmediaco/crunchperks
 
 Team members can clone, contribute, and deploy from this repository.
+
+RENDER DEPLOYMENT CONFIGURATION (October 30, 2025)
+===================================================
+
+SINGLE SERVICE DEPLOYMENT
+-------------------------
+Updated server.js to support monolithic deployment where the Express backend
+serves the built React app as static files in production.
+
+server/server.js Changes:
+- Added path module import
+- Added production check: if (process.env.NODE_ENV === 'production')
+- Serves static files from build/ folder
+- Catch-all route returns index.html for React Router support
+- Development mode still returns 404 JSON for API-only behavior
+
+RENDER CONFIGURATION FOR ONE SERVICE
+-------------------------------------
+Service Type: Web Service
+
+Build Command:
+  npm install && npm run build
+
+Start Command:
+  npm run server:prod
+
+Environment Variables Required:
+  NODE_ENV=production
+  MONGODB_URI=mongodb+srv://james_db_user:Au3IcopQekm2lqd4@crunchperks.5qlhpfu.mongodb.net/?appName=CrunchPerks
+  JWT_SECRET=f6fa0734f573da631094f7d904a2fcde7bf44c20afa7e8820f290f0afca31f43
+  CLOUDINARY_CLOUD_NAME=dbx0s2qsy
+  CLOUDINARY_API_KEY=659968855931844
+  CLOUDINARY_API_SECRET=xCrLN6ekyhv-ig9b3n6gxI9XDq4
+
+How It Works:
+1. Build phase: npm install downloads all dependencies, npm run build creates
+   optimized React production build in build/ folder
+2. Start phase: npm run server:prod starts Express server with NODE_ENV=production
+3. Express serves built React app for all routes except /api/*
+4. API routes (/api/auth, /api/applications, /api/ads) handled by backend
+5. All other routes serve index.html to support React Router client-side routing
+
+Benefits:
+- Single service = lower cost
+- Simpler deployment and management
+- No CORS issues (same origin)
+- Automatic API routing
+
+DEPLOYMENT ARCHITECTURE
+-----------------------
+Before: Considered two-service architecture (separate frontend/backend)
+After: Single-service monolithic architecture (backend serves frontend)
+
+This change was made in response to user question about why different commands
+were needed for frontend and backend when only one Render service exists.
+
