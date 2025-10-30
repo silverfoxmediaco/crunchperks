@@ -143,7 +143,7 @@ const Features = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {platformFeatures.map((feature, index) => (
               <div key={index} className="text-center">
-                <div className="text-5xl mb-4">{feature.icon}</div>
+                
                 <h4 className="text-xl font-heading text-burgundy mb-3">
                   {feature.title}
                 </h4>

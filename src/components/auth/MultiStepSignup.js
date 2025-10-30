@@ -181,11 +181,16 @@ const MultiStepSignup = () => {
       // Navigate to confirmation page
       navigate('/application-submitted');
     } catch (error) {
+      // Log full error for debugging
+      console.error('Application submission error:', error);
+      console.error('Error details:', JSON.stringify(error, null, 2));
+
       // Handle validation errors from backend
       if (error.errors && Array.isArray(error.errors)) {
+        console.log('Validation errors:', error.errors);
         const backendErrors = {};
         error.errors.forEach(err => {
-          backendErrors[err.field || 'form'] = err.message;
+          backendErrors[err.param || err.field || 'form'] = err.msg || err.message;
         });
         setErrors(backendErrors);
       } else {

@@ -40,7 +40,7 @@ const ValueCalculator = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
             {benefits.map((benefit, index) => (
               <div key={index} className="card bg-light-gray text-center hover:shadow-lg transition-shadow">
-                <div className="text-5xl mb-4">{benefit.icon}</div>
+                
                 <h3 className="text-2xl font-heading text-burgundy mb-2">
                   {benefit.title}
                 </h3>
