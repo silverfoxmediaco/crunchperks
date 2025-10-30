@@ -23,7 +23,7 @@ const validateApplication = [
   body('contactTitle').notEmpty().withMessage('Job title is required'),
   body('locationCount').isIn(['single', 'multi-small', 'multi-large']).withMessage('Valid location count is required'),
   body('tier').isIn(['dfw', 'statewide', 'nationwide']).withMessage('Valid tier is required'),
-  body('agreeToTerms').equals('true').withMessage('You must agree to the terms')
+  body('agreeToTerms').custom(value => value === true || value === 'true').withMessage('You must agree to the terms')
 ];
 
 // Routes

@@ -1677,3 +1677,34 @@ Benefits:
 - Encourages partners to review their ads
 - More confident decision-making
 
+
+APPLICATION SUBMIT VALIDATION FIX (October 30, 2025)
+====================================================
+
+ISSUE IDENTIFIED
+----------------
+Error: 400 Bad Request on application submission
+Cause: agreeToTerms validation was checking for string 'true' but frontend sends boolean true
+
+ROOT CAUSE
+----------
+File: server/routes/applicationRoutes.js line 26
+Original validation:
+  body('agreeToTerms').equals('true')
+
+This expected the string 'true', but JavaScript/JSON sends actual boolean true
+
+FIX APPLIED
+-----------
+Changed validation to accept both boolean and string:
+  body('agreeToTerms').custom(value => value === true || value === 'true')
+
+This now accepts:
+✓ Boolean true (from JavaScript)
+✓ String 'true' (from form submissions)
+
+Result:
+✓ Application submissions now work correctly
+✓ Terms checkbox validation passes
+✓ Partners can successfully submit applications
+
