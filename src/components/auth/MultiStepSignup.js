@@ -177,7 +177,7 @@ const MultiStepSignup = () => {
       });
 
       // Store application ID for the confirmation page
-      const applicationId = response.data?.data?.applicationId;
+      const applicationId = response.data?.applicationId;
 
       if (applicationId) {
         localStorage.setItem('applicationId', applicationId);
@@ -185,7 +185,7 @@ const MultiStepSignup = () => {
         // Navigate with ID in URL as backup
         navigate(`/application-submitted?id=${applicationId}`);
       } else {
-        console.error('❌ No Application ID in response:', response.data);
+        console.error('❌ No Application ID in response:', response);
         // Still navigate but without ID
         navigate('/application-submitted');
       }
