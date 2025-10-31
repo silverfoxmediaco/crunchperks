@@ -174,8 +174,15 @@ const MultiStepSignup = () => {
       });
 
       // Store application ID for the confirmation page
-      if (response.data && response.data.applicationId) {
-        localStorage.setItem('applicationId', response.data.applicationId);
+      if (response.data && response.data.data && response.data.data.applicationId) {
+        localStorage.setItem('applicationId', response.data.data.applicationId);
+
+        // If auto-approved, store credentials for easy reference
+        if (response.data.data.partnerAccount) {
+          console.log('✅ Account auto-approved! You can login with:');
+          console.log('Email:', response.data.data.partnerAccount.email);
+          console.log('Password:', response.data.data.partnerAccount.temporaryPassword);
+        }
       }
 
       // Navigate to confirmation page
