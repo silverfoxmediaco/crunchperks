@@ -51,9 +51,30 @@ const ApplicationSubmitted = () => {
             </div>
           )}
 
+          {/* Auto-Approved - Create Account CTA */}
+          <div className="bg-green-50 border-2 border-green-500 rounded-brand p-6 mb-6">
+            <div className="text-center">
+              <h3 className="text-2xl font-heading text-green-700 mb-3">
+                🎉 CONGRATULATIONS! YOUR APPLICATION HAS BEEN APPROVED!
+              </h3>
+              <p className="text-dark-gray mb-4 text-lg">
+                Your application was automatically approved for testing. Continue setting up your Partner Account to start advertising!
+              </p>
+              <Link
+                to="/partner/create-account"
+                className="btn-cta inline-block text-lg px-8 py-3"
+              >
+                Create Partner Account
+              </Link>
+              <p className="text-sm text-gray-700 mt-4 font-medium">
+                You'll need your Application ID shown above to create your account
+              </p>
+            </div>
+          </div>
+
           <div className="bg-light-gray rounded-brand p-6 mb-6">
             <h2 className="font-heading text-2xl text-burgundy mb-4">
-              WHAT HAPPENS NEXT?
+              NEXT STEPS
             </h2>
 
             <div className="text-left space-y-4">
@@ -62,9 +83,9 @@ const ApplicationSubmitted = () => {
                   1
                 </div>
                 <div>
-                  <h3 className="font-semibold text-dark-gray mb-1">Review Process</h3>
+                  <h3 className="font-semibold text-dark-gray mb-1">Create Your Partner Account</h3>
                   <p className="text-sm text-gray-600">
-                    Our team will review your application within 24-48 hours
+                    Click the button above and use your Application ID to set up your account with a secure password
                   </p>
                 </div>
               </div>
@@ -74,9 +95,9 @@ const ApplicationSubmitted = () => {
                   2
                 </div>
                 <div>
-                  <h3 className="font-semibold text-dark-gray mb-1">Approval Notification</h3>
+                  <h3 className="font-semibold text-dark-gray mb-1">Access Your Dashboard</h3>
                   <p className="text-sm text-gray-600">
-                    You'll receive an email with your approval status and next steps
+                    Once your account is created, you'll be automatically logged in to your partner dashboard
                   </p>
                 </div>
               </div>
@@ -86,9 +107,9 @@ const ApplicationSubmitted = () => {
                   3
                 </div>
                 <div>
-                  <h3 className="font-semibold text-dark-gray mb-1">Account Activation</h3>
+                  <h3 className="font-semibold text-dark-gray mb-1">Create Your First Ad</h3>
                   <p className="text-sm text-gray-600">
-                    Once approved, you'll get access to create your first ad campaign
+                    Design and upload your TV ad with our easy-to-use ad creator tool
                   </p>
                 </div>
               </div>
@@ -100,31 +121,10 @@ const ApplicationSubmitted = () => {
                 <div>
                   <h3 className="font-semibold text-dark-gray mb-1">Start Advertising</h3>
                   <p className="text-sm text-gray-600">
-                    Launch your TV ads and start reaching Crunch members immediately
+                    Your ads will start displaying on TV screens at Crunch locations and reaching thousands of gym members
                   </p>
                 </div>
               </div>
-            </div>
-          </div>
-
-          {/* Already Approved CTA */}
-          <div className="bg-green-50 border-2 border-green-500 rounded-brand p-6 mb-6">
-            <div className="text-center">
-              <h3 className="text-xl font-heading text-green-700 mb-2">
-                ALREADY APPROVED?
-              </h3>
-              <p className="text-dark-gray mb-4">
-                If your application has been approved, you can create your partner account and start advertising immediately!
-              </p>
-              <Link
-                to="/partner/create-account"
-                className="btn-cta inline-block"
-              >
-                Create Partner Account
-              </Link>
-              <p className="text-xs text-gray-600 mt-3">
-                You'll need your Application ID to create your account
-              </p>
             </div>
           </div>
 
