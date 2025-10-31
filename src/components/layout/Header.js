@@ -13,7 +13,7 @@ const Header = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center">
             <img
-              src="/crunch-logo.png"
+              src="/crunchperkslogotrans.png"
               alt="Crunch Perks"
               className="h-12 md:h-16"
             />

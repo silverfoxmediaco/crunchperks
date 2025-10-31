@@ -1812,3 +1812,24 @@ TESTING WORKFLOW
 5. Access full partner dashboard
 6. Create ads, view analytics, etc.
 
+
+LOGO UPDATE (October 30, 2025)
+===============================
+
+CHANGE MADE
+-----------
+Replaced Crunch logo with new Crunch Perks logo
+
+File: src/components/layout/Header.js
+
+Changes:
+- Changed logo path from "/crunch-logo.png" to "/crunchperkslogotrans.png"
+- Logo file located in public/crunchperkslogotrans.png
+- Maintains same sizing (h-12 md:h-16)
+
+New Logo Features:
+✓ Crunch Perks branding with fist graphic
+✓ Burgundy and orange color scheme
+✓ Transparent background
+✓ More prominent "Perks" branding
+
