@@ -1,15 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 
 const ApplicationSubmitted = () => {
   const [applicationId, setApplicationId] = useState(null);
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
+    // First try URL parameter (most recent)
+    const urlId = searchParams.get('id');
+    if (urlId) {
+      setApplicationId(urlId);
+      localStorage.setItem('applicationId', urlId); // Store for later use
+      return;
+    }
+
+    // Fallback to localStorage
     const storedId = localStorage.getItem('applicationId');
     if (storedId) {
       setApplicationId(storedId);
     }
-  }, []);
+  }, [searchParams]);
 
   return (
     <div className="min-h-screen bg-light-gray py-12 px-4">
@@ -126,13 +136,6 @@ const ApplicationSubmitted = () => {
                 </div>
               </div>
             </div>
-          </div>
-
-          <div className="bg-burgundy/10 border border-burgundy rounded-brand p-4 mb-6">
-            <p className="text-sm text-dark-gray">
-              <strong>Important:</strong> We'll send confirmation and updates to the email address you provided.
-              Please check your spam folder if you don't see our email within 48 hours.
-            </p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

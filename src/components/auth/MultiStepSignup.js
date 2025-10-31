@@ -177,12 +177,18 @@ const MultiStepSignup = () => {
       });
 
       // Store application ID for the confirmation page
-      if (response.data && response.data.data && response.data.data.applicationId) {
-        localStorage.setItem('applicationId', response.data.data.applicationId);
-      }
+      const applicationId = response.data?.data?.applicationId;
 
-      // Navigate to confirmation page
-      navigate('/application-submitted');
+      if (applicationId) {
+        localStorage.setItem('applicationId', applicationId);
+        console.log('✅ Application ID stored:', applicationId);
+        // Navigate with ID in URL as backup
+        navigate(`/application-submitted?id=${applicationId}`);
+      } else {
+        console.error('❌ No Application ID in response:', response.data);
+        // Still navigate but without ID
+        navigate('/application-submitted');
+      }
     } catch (error) {
       // Log full error for debugging
       console.error('Application submission error:', error);
