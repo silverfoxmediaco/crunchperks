@@ -15,7 +15,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// API Routes
+// API Routes (Updated: Oct 31, 2025 - Partner signup flow)
 try {
   console.log('Loading API routes...');
   const applicationRoutes = require('./routes/applicationRoutes');
@@ -29,11 +29,13 @@ try {
   app.use('/api/auth', authRoutes);
   app.use('/api/ads', adRoutes);
 
-  console.log('📍 API routes registered:');
-  console.log('  - /api/applications');
-  console.log('  - /api/auth/partner/login');
-  console.log('  - /api/auth/partner/signup');
-  console.log('  - /api/ads');
+  console.log('📍 API routes mounted successfully:');
+  console.log('  - POST /api/applications/submit');
+  console.log('  - POST /api/auth/partner/login');
+  console.log('  - POST /api/auth/partner/signup');
+  console.log('  - GET  /api/auth/partner/me');
+  console.log('  - POST /api/ads/create');
+  console.log('  - GET  /api/ads');
 } catch (error) {
   console.error('❌ Error loading API routes:', error);
   process.exit(1);
