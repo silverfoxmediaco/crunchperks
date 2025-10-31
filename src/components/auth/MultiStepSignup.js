@@ -154,6 +154,9 @@ const MultiStepSignup = () => {
     setSubmitting(true);
     setErrors({});
 
+    // Clear any old application ID from previous submissions
+    localStorage.removeItem('applicationId');
+
     try {
       const response = await apiClient.post('/applications/submit', {
         businessCategory: formData.businessCategory,

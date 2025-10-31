@@ -2091,3 +2091,39 @@ The /api/auth/partner/signup 404 issue was resolved by:
 - Hard refresh resolved the issue
 - Endpoint now working correctly in production
 
+
+LOCALSTORAGE APPLICATION ID FIX (October 31, 2025)
+===================================================
+
+ISSUE IDENTIFIED
+----------------
+Same Application ID kept appearing on confirmation page (6904cd34b79269f987b486b5)
+across multiple submission attempts, even with different business info.
+
+ROOT CAUSE
+----------
+localStorage was caching the Application ID from the first successful submission.
+When subsequent submissions failed (duplicate EIN/email), the old cached ID
+remained in localStorage and displayed on confirmation page.
+
+FIX APPLIED
+-----------
+File: src/components/auth/MultiStepSignup.js (line 158)
+
+Added localStorage.removeItem('applicationId') at the START of handleSubmit:
+- Clears any old Application ID before new submission attempt
+- Ensures fresh Application ID is stored only on successful submission
+- Prevents stale data from showing on confirmation page
+
+BEHAVIOR NOW
+------------
+1. User clicks "Submit Application"
+2. Old Application ID cleared from localStorage immediately
+3. API request sent to backend
+4. On success: New Application ID stored in localStorage
+5. On failure: localStorage remains empty (no stale ID)
+6. Confirmation page shows correct Application ID or nothing if failed
+
+This ensures each submission attempt gets a unique Application ID
+and prevents confusion from seeing old IDs on the confirmation page.
+
