@@ -1930,3 +1930,108 @@ TESTING CHECKLIST
 ✓ Can login immediately with provided credentials
 ✓ Full access to partner dashboard
 
+
+AUTO-APPROVAL WORKFLOW FIX (October 31, 2025)
+==============================================
+
+ISSUE IDENTIFIED
+----------------
+User reported that Partner account should NOT be created during application
+submission. The account should only be created AFTER the "Create Your Account"
+step using the application ID.
+
+Previous (WRONG) Flow:
+1. Submit application → Auto-approve AND create Partner account
+2. User tries to go through "Create Your Account" with Application ID
+3. Gets error: "An account has already been created for this application"
+
+Correct Flow:
+1. Submit application → Auto-approve (but DON'T create Partner account)
+2. User receives Application ID
+3. User goes to "Create Your Account" page
+4. User enters: Application ID + Email + Password
+5. THEN create Partner account via /api/auth/partner/signup
+
+ROOT CAUSE
+----------
+Auto-approval was creating the Partner account immediately during application
+submission in applicationController.js, preventing users from going through
+the proper account creation flow.
+
+FIX APPLIED
+-----------
+File: server/controllers/applicationController.js
+
+Removed Partner account creation from auto-approval logic:
+- Removed Partner model import (line 2)
+- Removed Partner account creation (lines 92-116)
+- Removed partner credentials variable and logging
+- Removed partnerAccount data from API response (lines 129-136)
+
+Auto-approval now ONLY:
+✓ Sets application status to 'approved'
+✓ Sets approvedAt and reviewedAt timestamps
+✓ Saves the application
+✓ Returns applicationId for user
+
+File: src/components/auth/MultiStepSignup.js
+
+Removed partner credential console logging:
+- Removed lines 180-185 (no longer checking for partnerAccount in response)
+- Simplified to only store applicationId in localStorage
+
+CORRECT FLOW NOW
+----------------
+1. User submits application (6-step form)
+2. Backend auto-approves application (if AUTO_APPROVE_APPLICATIONS=true)
+3. Response includes applicationId
+4. User navigated to /application-submitted confirmation page
+5. User sees "Create Your Account" message
+6. User enters:
+   - Application ID: 6904d294e77e1c85103511de
+   - Email: jesse@testemail.com
+   - Password: (user chooses)
+7. POST /api/auth/partner/signup endpoint creates Partner account
+8. Verifies:
+   - Application exists and is approved
+   - Email matches application
+   - No existing Partner account
+9. Creates Partner account with user's chosen password
+10. Returns JWT token for immediate login
+11. User redirected to dashboard
+
+BENEFITS
+--------
+✓ Proper separation of application approval and account creation
+✓ Users choose their own password
+✓ Follows intended workflow
+✓ /api/auth/partner/signup endpoint is used correctly
+✓ No duplicate account errors
+✓ Auto-approval still speeds up testing (no manual approval wait)
+
+BACKEND ENDPOINTS
+-----------------
+POST /api/applications/submit
+- Creates application
+- Auto-approves if AUTO_APPROVE_APPLICATIONS=true
+- Returns applicationId
+- Does NOT create Partner account
+
+POST /api/auth/partner/signup
+- Accepts: applicationId, email, password
+- Verifies application is approved
+- Verifies email matches application
+- Creates Partner account
+- Returns JWT token
+
+TESTING STEPS
+-------------
+1. Submit application → Get applicationId
+2. Go to "Create Your Account" page
+3. Enter Application ID: [from response]
+4. Enter Email: [from application]
+5. Choose Password: [8+ characters]
+6. Submit → Partner account created
+7. Automatically logged in with JWT token
+8. Access full partner dashboard
+

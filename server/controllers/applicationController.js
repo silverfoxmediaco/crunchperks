@@ -1,5 +1,4 @@
 const Application = require('../models/Application');
-const Partner = require('../models/Partner');
 const { validationResult } = require('express-validator');
 
 // @desc    Submit new partner application
@@ -79,61 +78,32 @@ exports.submitApplication = async (req, res) => {
     // - To assigned manager: new application notification
 
     // AUTO-APPROVE IF ENABLED (FOR TESTING)
-    let partnerCredentials = null;
     if (process.env.AUTO_APPROVE_APPLICATIONS === 'true') {
       console.log('🔧 Auto-approval enabled: Approving application...');
 
-      // Update application status
+      // Update application status (but don't create Partner account yet)
       application.status = 'approved';
       application.approvedAt = new Date();
       application.reviewedAt = new Date();
       await application.save();
 
-      // Create Partner account
-      const defaultPassword = 'CrunchPerks2025!';
-      const partner = await Partner.create({
-        businessName: legalBusinessName,
-        ein,
+      console.log('✅ Application auto-approved:', {
+        applicationId: application._id,
         email: contactEmail,
-        password: defaultPassword, // Will be hashed by pre-save hook
-        contactName: `${contactFirstName} ${contactLastName}`,
-        phoneNumber: contactPhone,
-        accountStatus: 'active',
-        tier,
-        applicationId: application._id
-      });
-
-      partnerCredentials = {
-        email: contactEmail,
-        password: defaultPassword,
-        partnerId: partner._id
-      };
-
-      console.log('✅ Partner account created:', {
-        email: contactEmail,
-        businessName: legalBusinessName,
-        partnerId: partner._id
+        businessName: legalBusinessName
       });
     }
 
     res.status(201).json({
       success: true,
       message: process.env.AUTO_APPROVE_APPLICATIONS === 'true'
-        ? 'Application submitted and auto-approved for testing!'
+        ? 'Application submitted and auto-approved! Use your Application ID to create your account.'
         : 'Application submitted successfully',
       data: {
         applicationId: application._id,
         status: application.status,
         submittedAt: application.submittedAt,
-        assignedTo: application.assignedTo,
-        ...(partnerCredentials && {
-          partnerAccount: {
-            message: 'Partner account created (development only)',
-            email: partnerCredentials.email,
-            temporaryPassword: partnerCredentials.password,
-            loginUrl: '/login'
-          }
-        })
+        assignedTo: application.assignedTo
       }
     });
 
